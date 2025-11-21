@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна робота – Анімації CSS</title>
+    <style>
+        /* БАЗОВЕ ОФОРМЛЕННЯ СТОРІНКИ */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1f2933, #111827);
+            color: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        p.subtitle {
+            margin: 0 0 20px;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1100px;
+            padding: 20px 0 40px;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .card p.desc {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .demo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 130px;
+        }
+
+        /* 1. КРУГОВИЙ LOADER (РОТАЦІЯ) */
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 6px solid rgba(148, 163, 184, 0.4);
+            border-top-color: #38bdf8;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 2. LOADER З СТРИБАЮЧИХ ТОЧОК */
+        .dots-loader {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dots-loader span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #a5b4fc;
+            animation: bounce 0.8s ease-in-out infinite;
+        }
+
+        .dots-loader span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .dots-loader span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* 3. СКЛАДНЕ ПЕРЕТВОРЕННЯ: ОБЕРТАННЯ + МАСШТАБ + ЗСУВ */
+        .complex-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f97316, #facc15);
+            animation: complexMove 2.5s ease-in-out infinite;
+        }
+
+        @keyframes complexMove {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            25% {
+                transform: translate(40px, -20px) scale(1.1) rotate(10deg);
+            }
+            50% {
+                transform: translate(0, -30px) scale(0.9) rotate(-10deg);
+            }
+            75% {
+                transform: translate(-40px, -5px) scale(1.15) rotate(5deg);
+            }
+            100% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+        }
+
+        /* 4. 3D ПЕРЕВЕРТАННЯ КАРТКИ ПРИ HOVER */
+        .flip-container {
+            perspective: 1000px;
+            width: 180px;
+            height: 120px;
+        }
+
+        .flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+        }
+
+        .flip-container:hover .flip-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 14px;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .flip-front {
+            background: linear-gradient(135deg, #22c55e, #4ade80);
+        }
+
+        .flip-back {
+            background: linear-gradient(135deg, #0ea5e9, #6366f1);
+            transform: rotateY(180deg);
+        }
+
+        /* 5. АНІМОВАНА КНОПКА З ПУЛЬСОМ ПРИ HOVER */
+        .btn-animated {
+            padding: 10px 24px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: #f9fafb;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.7);
+        }
+
+        .btn-animated:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.9);
+        }
+
+        .btn-animated::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 2px solid rgba(244, 244, 245, 0.3);
+            opacity: 0;
+            animation: none;
+        }
+
+        .btn-animated:hover::after {
+            animation: pulse 1.2s ease-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.25);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Лабораторна робота: Анімації в Web-дизайні</h1>
+    <p class="subtitle">Приклади завантаження, складних перетворень та анімованих елементів інтерфейсу</p>
+
+    <div class="grid">
+        <!-- 1. КРУГОВИЙ LOADER -->
+        <div class="card">
+            <h2>1. Анімація завантаження (круговий loader)</h2>
+            <p class="desc">
+                Використовується <code>@keyframes</code> для безкінечного обертання елемента.
+                Імітація індикатора завантаження.
+            </p>
+            <div class="demo-area">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- 2. LOADER З СТРИБАЮЧИХ ТОЧОК -->
+        <div class="card">
+            <h2>2. Loader зі стрибками точок</h2>
+            <p class="desc">
+                Три точки змінюють положення по осі Y з різною затримкою.
+                Приклад «очікування відповіді» (typing / loading).
+            </p>
+            <div class="demo-area">
+                <div class="dots-loader">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. СКЛАДНЕ ПЕРЕТВОРЕННЯ -->
+        <div class="card">
+            <h2>3. Складна анімація (transform: translate + scale + rotate)</h2>
+            <p class="desc">
+                Блок рухається по траєкторії, змінює розмір і кут повороту.
+                Демонструє комбіноване використання <code>transform</code>.
+            </p>
+            <div class="demo-area">
+                <div class="complex-box"></div>
+            </div>
+        </div>
+
+        <!-- 4. 3D FLIP КАРТКА -->
+        <div class="card">
+            <h2>4. 3D перевертання картки при наведенні</h2>
+            <p class="desc">
+                При наведенні картка обертається на 180° по осі Y.
+                Використовуються <code>perspective</code>, <code>transform-style: preserve-3d</code>.
+            </p>
+            <div class="demo-area">
+                <div class="flip-container">
+                    <div class="flip-inner">
+                        <div class="flip-face flip-front">Front</div>
+                        <div class="flip-face flip-back">Back</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. АНІМОВАНА КНОПКА -->
+        <div class="card">
+            <h2>5. Пульсуюча кнопка при наведенні</h2>
+            <p class="desc">
+                Кнопка плавно збільшується, з'являється пульсуюча рамка.
+                Приклад анімації елементів UI при взаємодії користувача.
+            </p>
+            <div class="demo-area">
+                <button class="btn-animated">Наведи курсор</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
